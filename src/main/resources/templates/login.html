@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+ <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="stylesheet" type="text/css"  th:href="@{/resources/css/stylesheet.css}" />
+      <link rel="stylesheet" type="text/css"  th:href="@{/resources/css/common.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src=" https://unpkg.com/sweetalert/dist/sweetalert.min.js "> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <title>Instituto Nacional Electoral:</title>
+
+    </head>
+   
+   
+<body>
+
+
+<div class="container ${status.error ? 'has-error' : ''}">
+        <form name="loginForm"  th:action="@{/appLogin}"  method="post" class="form-signin" id="loginForm" >
+        <h3 class="form-heading">Acceso de Usuario</h3>
+        
+           
+            <div class="form-group " >
+              
+            <input name="username" type="text" class="form-control" placeholder="correo" autofocus="true" required/>
+            <input name="password" type="password"class="form-control" placeholder="Password" required/>
+         
+          
+                <label class="prompt">validacion  de la imagen:</label>
+				
+				<div class="validationDiv" >
+				<div class="g-recaptcha" data-sitekey="6LfIuD4dAAAAALpSd2w3Cfic55wrEwhI3qbvbnbL" id="recaptcha" ></div>
+                </div>
+
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                
+                <input type="hidden" name="type" value="loginForm" />
+
+                <button class=" btn btn-lg btn-primary btn-block" type="submit" value="Add" onclick="Add() " id="button" >Log In</button>
+                
+
+			</div>
+			<span id="captcha-error" style="color:red"></span>
+			<div class="alert alert-success" th:if="${message != null}"
+			th:text="${message}"></div>
+		<div class="alert alert-danger" th:if="${error != null}"
+			th:text="${error}"></div>
+		<div class="alert alert-warning" th:if="${warning != null}"
+			th:text="${warning}"></div>
+		<div class="alert alert-info" th:if="${info2 != null}"
+			th:text="${info2}"></div>
+			 
+        </form>
+            
+
+</div>
+<!-- <script src="webjars/jquery/1.11.2/jquery.min.js"></script> -->
+<!--  <script type="text/javascript" -->
+<!--         src="webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
+  <script src="https://www.google.com/recaptcha/api.js" type="text/javascript"></script>
+<script th:src="@{/resources/core/js/bootstrap.min.js}"></script>
+<script th:src="@{/resources/core/js/jquery.min.js}"></script>
+    </body>
+    <script type="text/javascript">
+    function validateAndGetCaptchaResponse() {
+        const response = grecaptcha.getResponse();
+        return response.length === 0 ? null : response;
+    }
+
+    $(document).ready(function () {
+        $("#button").click(function () {
+            $("#captcha-error").html("");
+
+            let captchaResponse = validateAndGetCaptchaResponse();
+            if (captchaResponse) {
+                console.log("Captcha code accepted.")
+                let name = $("#name").val();
+                let requestObj = {
+                    'name': name.length === 0 ? 'Dummy' : name
+                };
+
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    headers: {
+                        "captcha-response": captchaResponse
+                    },
+                    data: JSON.stringify(requestObj),
+                    url: "http://localhost:8080/welcome",
+                    success: function (data) {
+                        alert(data.message);
+                    }
+                });
+            } else {
+   
+                $("#captcha-error").html("<div class='alert alert-danger'>You cannot leave the captcha code empty.</div>");
+                return false;
+            }
+        });
+    });
+</script>
+    <script>
+        function validate()
+        {
+            if($('#correo').val().trim().length == 0)
+            {
+                alert("${usernameRequired}");
+                return false;
+            }
+            else if($('#password').val().trim().length == 0)
+            {
+                alert("${passwordRequired}");
+                return false;
+            }
+        }
+        
+     
+    </script>
+    <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<footer><div  align="center" ><h4>Derechos Reservados, Instituto Nacional Electoral, Mexico.</h4></div></footer>
+</html>

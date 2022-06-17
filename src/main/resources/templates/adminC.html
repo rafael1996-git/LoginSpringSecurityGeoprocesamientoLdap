@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" 
+     xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head th:replace="fragments/layout :: head"></head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<header th:replace="fragments/layout :: header"></header>
+<link rel="stylesheet" type="text/css"  th:href="@{/resources/css/admin.css}" />
+<style>
+.my-custom-scrollbar {
+	position: relative;
+	height: 200px;
+	overflow: auto;
+}
+
+.table-wrapper-scroll-y {
+	display: block;
+}
+</style>
+<body>
+
+	<div class="container">
+		<div class="row-fluid">
+			<div class="col-sm-12">
+				
+				<div class="row">
+					<div class="col-sm-4">
+						<section id="contenido">
+
+							<div id="informacion">
+								<div
+									class="card  col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 .img-fluid"
+									style="min-width: 300px;">
+									<img th:src="@{/resources/images/avatar.jpg}" type="image/png" class="img-circle" alt="Card image" />
+
+									<div class="card-block">
+						
+							<h6 class="card-title">Nombre del Usuario Generador de la
+								Remesa: <span sec:authentication="name"></span></h6></div>
+								</div>
+							</div>
+
+						</section>
+					</div>
+					<div class="col-sm-8" align="center">
+						<h2 align="center" style="margin-top: 130px;">Geoprocesamiento
+							de la Remesa de Actualizacion Cartografica</h2>
+					</div>
+				</div>
+
+
+
+
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="card">
+							<div class="card-body">
+								<h4 class="card-title">Generacion de Remesa</h4>
+								<p class="card-text">Este Usuario tiene Permisos para
+									Administrar y Procesar la generacion de Remesa</p>
+								<a th:href="@{/remesa}" class="btn btn-primary">Generar
+									Remesa</a> <a th:href="@{/avance}" class="btn btn-primary">Mostrar
+									Avance</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<br>
+
+				<div class="input-group md-form form-sm form-1 pl-0">
+					<div class="input-group-prepend">
+						<span class="input-group-text cyan lighten-2"><i
+							class="fas fa-search text-white" aria-hidden="true"></i></span>
+					</div>
+					<input class="form-control my-0 py-1" id="tableSearch" type="text"
+						placeholder="Search" aria-label="Search">
+				</div>
+				<br>
+
+				<div class="card bg-light">
+
+					<div class="card-body">
+
+						<div class="table-wrapper-scroll-y my-custom-scrollbar">
+							<table class="table table-striped table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th>ID_ROL</th>
+										<th>USUARIO</th>
+										<th>CORREO</th>
+										<th>ENTIDAD</th>
+									</tr>
+								</thead>
+								<tbody id="myTable">
+									<tr th:each="dato: ${lista}">
+										<td th:text="${dato.id_rol}"></td>
+										<td th:text="${dato.usuario}"></td>
+										<td th:text="${dato.correo}"></td>
+										<td th:text="${dato.entidad}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function ConfirmDelete() {
+			var x = confirm("Estas seguro de Borrar el Usuario?");
+			if (x)
+				return true;
+			else
+				return false;
+		}
+	</script>
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+							$("#tableSearch")
+									.on(
+											"keyup",
+											function() {
+												var value = $(this).val()
+														.toLowerCase();
+												$("#myTable tr")
+														.filter(
+																function() {
+																	$(this)
+																			.toggle(
+																					$(
+																							this)
+																							.text()
+																							.toLowerCase()
+																							.indexOf(
+																									value) > -1)
+																});
+											});
+						});
+	</script>
+</body>
+<br>
+
+
+
+
+<div class="container-xl mt-3 border  p-3 my-3 bg-dark text-white"
+	align="center">
+<footer th:replace="fragments/layout :: footer"></footer>
+</div>
+
+</html>
